@@ -1,987 +1,341 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>집변 HomeLawyer - 단지 등록</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>집변 - 가입</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#2C3E50;--bg:#fff;--text:#111;--sub:#888;--border:#e5e7eb;--card:#fff;--input-bg:#f9fafb}
+body{font-family:-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.5;display:flex;justify-content:center;min-height:100vh}
+#app{width:100%;max-width:430px;position:relative;padding-bottom:40px}
 
-    :root {
-      --navy: #2C3E50;
-      --navy-light: #3d5166;
-      --navy-bg: #eef1f4;
-      --black: #111827;
-      --gray: #6b7280;
-      --gray-light: #9ca3af;
-      --border: #e5e7eb;
-      --white: #ffffff;
-      --green: #16a34a;
-      --red: #dc2626;
-      --radius: 16px;
-      --shadow: 0 1px 4px rgba(0,0,0,0.07);
-    }
+/* Steps */
+.step{display:none;padding:0 20px}
+.step.active{display:block}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 16px;
-      background: #f5f6f8;
-      color: var(--black);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
+/* Progress */
+.progress{padding:16px 20px 0;display:none}
+.progress.show{display:block}
+.progress-bar{height:4px;background:#f0f0f0;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--navy);border-radius:4px;transition:width 0.4s ease}
+.progress-label{font-size:12px;color:var(--sub);margin-top:6px;text-align:right}
 
-    #app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      background: var(--white);
-      display: flex;
-      flex-direction: column;
-    }
+/* Header */
+.step-header{padding:40px 0 24px;text-align:center}
+.logo{font-size:28px;font-weight:800;color:var(--navy);letter-spacing:-0.5px}
+.logo-sub{font-size:13px;color:var(--sub);margin-top:4px}
+.step-title{font-size:22px;font-weight:700;margin-bottom:6px}
+.step-desc{font-size:14px;color:var(--sub);line-height:1.6}
 
-    /* Progress bar */
-    .progress-wrap {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 20px 12px;
-    }
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .progress-label span {
-      font-size: 12px;
-      color: var(--gray);
-    }
-    .progress-label strong {
-      font-size: 12px;
-      color: var(--navy);
-      font-weight: 600;
-    }
-    .progress-bar-bg {
-      width: 100%;
-      height: 4px;
-      background: var(--border);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: var(--navy);
-      border-radius: 99px;
-      transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
-    }
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:14px}
 
-    /* Content */
-    .content {
-      flex: 1;
-      padding: 24px 20px 32px;
-      display: flex;
-      flex-direction: column;
-    }
+/* Social buttons */
+.social-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border-radius:12px;font-size:16px;font-weight:600;border:none;cursor:pointer;margin-bottom:12px;transition:transform 0.15s}
+.social-btn:active{transform:scale(0.98)}
+.btn-kakao{background:#FEE500;color:#3C1E1E}
+.btn-naver{background:#03C75A;color:#fff}
 
-    /* Step heading */
-    .step-tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--navy);
-      background: var(--navy-bg);
-      padding: 3px 10px;
-      border-radius: 99px;
-      margin-bottom: 14px;
-    }
-    .step-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--black);
-      line-height: 1.3;
-      margin-bottom: 6px;
-    }
-    .step-desc {
-      font-size: 14px;
-      color: var(--gray);
-      line-height: 1.6;
-      margin-bottom: 28px;
-    }
+/* Input */
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--sub);margin-bottom:6px}
+.form-input,.form-select{width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:15px;background:var(--input-bg);outline:none;font-family:inherit;transition:border-color 0.2s}
+.form-input:focus,.form-select:focus{border-color:var(--navy)}
+.form-input.error{border-color:#e53e3e}
+.error-msg{font-size:12px;color:#e53e3e;margin-top:4px;display:none}
+.form-input.error+.error-msg{display:block}
+.form-row{display:flex;gap:10px}
+.form-row .form-group{flex:1}
 
-    /* Card */
-    .card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: var(--shadow);
-    }
+/* User info card */
+.user-card{display:flex;align-items:center;gap:14px;padding:18px;background:var(--input-bg);border-radius:14px;margin-bottom:20px}
+.user-avatar{width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;flex-shrink:0}
+.user-name{font-size:17px;font-weight:700}
+.user-sub{font-size:13px;color:var(--sub)}
 
-    /* Value cards row */
-    .value-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 32px;
-    }
-    .value-card {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 16px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--white);
-    }
-    .value-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: var(--navy-bg);
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .value-icon svg { width: 20px; height: 20px; }
-    .value-text h4 {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--black);
-      margin-bottom: 3px;
-    }
-    .value-text p {
-      font-size: 13px;
-      color: var(--gray);
-      line-height: 1.5;
-    }
+/* Pill button */
+.btn{display:block;width:100%;padding:16px;border-radius:14px;font-size:16px;font-weight:700;border:none;cursor:pointer;text-align:center;transition:all 0.2s}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:active{background:#1a252f}
+.btn-primary:disabled{background:#ccc;cursor:not-allowed}
+.btn-outline{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
 
-    /* Logo area */
-    .logo-area {
-      text-align: center;
-      padding: 32px 0 20px;
-    }
-    .logo-mark {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 64px;
-      height: 64px;
-      background: var(--navy);
-      border-radius: 18px;
-      margin-bottom: 12px;
-    }
-    .logo-mark svg { width: 34px; height: 34px; }
-    .logo-name {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--navy);
-      letter-spacing: -0.5px;
-    }
-    .logo-sub {
-      font-size: 13px;
-      color: var(--gray);
-      margin-top: 4px;
-    }
+/* Checkbox */
+.check-row{display:flex;align-items:flex-start;gap:10px;padding:14px 0;border-bottom:1px solid #f0f0f0;cursor:pointer}
+.check-row:last-child{border-bottom:none}
+.check-box{width:22px;height:22px;border:2px solid var(--border);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;margin-top:1px}
+.check-box.checked{background:var(--navy);border-color:var(--navy)}
+.check-box.checked::after{content:'';width:6px;height:10px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) translate(-1px,-1px)}
+.check-text{font-size:14px;line-height:1.5}
+.check-text .required{color:#e53e3e;font-weight:600}
+.check-all{font-weight:700;font-size:15px;padding:16px 0;border-bottom:2px solid var(--text)}
 
-    /* Form */
-    .form-group {
-      margin-bottom: 18px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--black);
-      margin-bottom: 6px;
-    }
-    .form-group label .required {
-      color: var(--navy);
-      margin-left: 2px;
-    }
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      height: 48px;
-      padding: 0 14px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 15px;
-      color: var(--black);
-      background: var(--white);
-      outline: none;
-      transition: border-color 0.2s;
-      -webkit-appearance: none;
-    }
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: var(--navy);
-      box-shadow: 0 0 0 3px rgba(44,62,80,0.08);
-    }
-    .form-group input.error,
-    .form-group select.error {
-      border-color: var(--red);
-    }
-    .form-group .error-msg {
-      font-size: 12px;
-      color: var(--red);
-      margin-top: 5px;
-      display: none;
-    }
-    .form-group.has-error .error-msg { display: block; }
-    .form-group.has-error input,
-    .form-group.has-error select { border-color: var(--red); }
+/* Contract */
+.contract-box{background:var(--input-bg);border-radius:14px;padding:20px;margin-bottom:16px;max-height:200px;overflow-y:auto;font-size:13px;color:#555;line-height:1.8}
+.contract-box h4{font-size:14px;color:var(--text);margin-bottom:8px}
 
-    /* Select arrow */
-    .select-wrap { position: relative; }
-    .select-wrap::after {
-      content: '';
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 0; height: 0;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 6px solid var(--gray-light);
-      pointer-events: none;
-    }
-    .select-wrap select { padding-right: 36px; }
+/* Signature */
+.sign-area{border:1.5px dashed var(--border);border-radius:14px;height:120px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.sign-area:hover{border-color:var(--navy)}
+.sign-placeholder{font-size:14px;color:var(--sub);text-align:center}
+.sign-placeholder b{display:block;font-size:15px;color:var(--text);margin-bottom:2px}
+canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+.sign-done{display:none;position:absolute;bottom:8px;right:12px;font-size:11px;color:var(--navy);font-weight:600;background:rgba(255,255,255,0.9);padding:2px 8px;border-radius:8px}
+.sign-actions{display:flex;gap:8px;margin-bottom:16px}
+.sign-actions button{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;border:1px solid var(--border);background:#fff;cursor:pointer}
 
-    /* Checkbox */
-    .checkbox-wrap {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      margin-bottom: 20px;
-    }
-    .checkbox-wrap:hover { border-color: var(--navy); background: var(--navy-bg); }
-    .checkbox-wrap input[type="checkbox"] {
-      width: 18px; height: 18px;
-      flex-shrink: 0;
-      margin-top: 1px;
-      accent-color: var(--navy);
-      cursor: pointer;
-    }
-    .checkbox-wrap span {
-      font-size: 13px;
-      color: var(--black);
-      line-height: 1.5;
-    }
-    .checkbox-wrap.error-cb { border-color: var(--red); }
-
-    /* Service option cards */
-    .service-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 28px;
-    }
-    .service-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: border-color 0.18s, background 0.18s;
-      user-select: none;
-    }
-    .service-card:hover { border-color: var(--navy); }
-    .service-card.selected {
-      border-color: var(--navy);
-      background: var(--navy-bg);
-    }
-    .service-card-info h4 {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--black);
-      margin-bottom: 2px;
-    }
-    .service-card-info p {
-      font-size: 12px;
-      color: var(--gray);
-    }
-    .service-check {
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      border: 1.5px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      transition: all 0.18s;
-    }
-    .service-card.selected .service-check {
-      background: var(--navy);
-      border-color: var(--navy);
-    }
-    .service-check svg { display: none; }
-    .service-card.selected .service-check svg { display: block; }
-
-    /* Contract summary */
-    .summary-section {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-    .summary-header {
-      background: var(--navy);
-      padding: 14px 16px;
-    }
-    .summary-header h3 {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--white);
-    }
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 11px 16px;
-      border-bottom: 1px solid var(--border);
-      gap: 12px;
-    }
-    .summary-row:last-child { border-bottom: none; }
-    .summary-row dt {
-      font-size: 13px;
-      color: var(--gray);
-      flex-shrink: 0;
-      min-width: 100px;
-    }
-    .summary-row dd {
-      font-size: 13px;
-      color: var(--black);
-      font-weight: 500;
-      text-align: right;
-    }
-    .summary-row dd.accent {
-      color: var(--navy);
-      font-weight: 700;
-    }
-    .summary-divider {
-      background: #f9fafb;
-      padding: 8px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .summary-divider span {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--gray-light);
-    }
-
-    /* Tags */
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .tag {
-      font-size: 12px;
-      font-weight: 500;
-      background: var(--navy-bg);
-      color: var(--navy);
-      padding: 3px 10px;
-      border-radius: 99px;
-    }
-
-    /* Buttons */
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 0 24px;
-      height: 52px;
-      border-radius: 99px;
-      border: none;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s;
-      letter-spacing: -0.2px;
-    }
-    .btn:active { transform: scale(0.98); opacity: 0.88; }
-    .btn-primary {
-      background: var(--navy);
-      color: var(--white);
-    }
-    .btn-primary:hover { background: var(--navy-light); }
-    .btn-outline {
-      background: var(--white);
-      color: var(--navy);
-      border: 1.5px solid var(--navy);
-    }
-    .btn-outline:hover { background: var(--navy-bg); }
-    .btn-success {
-      background: var(--green);
-      color: var(--white);
-    }
-
-    /* Spacer */
-    .spacer { flex: 1; }
-
-    /* Complete screen */
-    .complete-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 48px 0 32px;
-    }
-    .check-circle {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      background: #dcfce7;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 24px;
-    }
-    .check-circle svg { width: 40px; height: 40px; }
-    .complete-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--black);
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
-    .complete-desc {
-      font-size: 14px;
-      color: var(--gray);
-      line-height: 1.6;
-      margin-bottom: 28px;
-    }
-    .receipt-card {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      text-align: center;
-      margin-bottom: 32px;
-    }
-    .receipt-card p {
-      font-size: 12px;
-      color: var(--gray);
-      margin-bottom: 6px;
-    }
-    .receipt-card .receipt-no {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--navy);
-      letter-spacing: 1px;
-    }
-
-    /* Step visibility */
-    .step { display: none; }
-    .step.active { display: flex; flex-direction: column; flex: 1; }
-
-    /* Fade animation */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .step.active { animation: fadeIn 0.22s ease; }
-
-    /* Step 1 no progress */
-    .progress-wrap.hidden { display: none; }
-
-    /* Util */
-    .mt8 { margin-top: 8px; }
-    .mt16 { margin-top: 16px; }
-    .mt24 { margin-top: 24px; }
-  </style>
+/* Complete */
+.complete-icon{width:80px;height:80px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:36px;margin:40px auto 24px}
+.complete-title{text-align:center;font-size:24px;font-weight:800;margin-bottom:8px}
+.complete-sub{text-align:center;font-size:14px;color:var(--sub);margin-bottom:32px;line-height:1.7}
+.complete-card{background:var(--input-bg);border-radius:14px;padding:18px;margin-bottom:24px}
+.complete-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;border-bottom:1px solid #eee}
+.complete-row:last-child{border-bottom:none}
+.complete-row span:first-child{color:var(--sub)}
+.complete-row span:last-child{font-weight:600}
+</style>
 </head>
 <body>
 <div id="app">
 
-  <!-- Progress bar -->
-  <div class="progress-wrap" id="progressWrap">
-    <div class="progress-label">
-      <span id="progressText">기본 정보</span>
-      <strong id="progressFraction">1 / 5</strong>
-    </div>
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressFill" style="width:20%"></div>
-    </div>
-  </div>
+<!-- Progress -->
+<div class="progress" id="progress">
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="progress-label" id="progressLabel"></div>
+</div>
 
-  <!-- ===== STEP 1: 서비스 소개 ===== -->
-  <div class="step active" id="step1">
-    <div class="content">
-      <div class="logo-area">
-        <div class="logo-mark">
-          <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17 3L4 13v18h8v-9h10v9h8V13L17 3z" fill="#fff" opacity="0.15"/>
-            <path d="M17 3L4 13v18h8v-9h10v9h8V13L17 3z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
-            <path d="M13 22h8" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="logo-name">집변</div>
-        <div class="logo-sub">HomeLawyer</div>
-      </div>
+<!-- Step 1: 소셜 로그인 -->
+<div class="step active" id="step1">
+<div class="step-header">
+<div class="logo">집변</div>
+<div class="logo-sub">HomeLawyer</div>
+</div>
+<div style="padding:0 0 32px;text-align:center">
+<div class="step-title">아파트 법률 자문,<br>집변에서 시작하세요</div>
+<div class="step-desc" style="margin-top:8px">AI 법률 상담부터 전문 변호사 연결까지<br>우리 단지에 맞는 법률 서비스</div>
+</div>
+<div style="margin-bottom:20px">
+<button class="social-btn btn-kakao" onclick="socialLogin('kakao')">
+<svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 1C5.03 1 1 4.3 1 8.35c0 2.58 1.71 4.84 4.29 6.14l-1.1 4.07c-.08.3.26.54.52.37L9 15.9c.33.04.66.06 1 .06 4.97 0 9-3.3 9-7.35S14.97 1 10 1z" fill="#3C1E1E"/></svg>
+카카오로 시작하기
+</button>
+<button class="social-btn btn-naver" onclick="socialLogin('naver')">
+<svg width="20" height="20" viewBox="0 0 20 20"><path d="M13.36 10.53L6.4 1H1v18h5.64V9.47L13.6 19H19V1h-5.64z" fill="#fff"/></svg>
+네이버로 시작하기
+</button>
+</div>
+<div style="text-align:center;font-size:12px;color:#bbb;padding-bottom:20px">
+가입 시 <span style="text-decoration:underline;cursor:pointer">이용약관</span> 및 <span style="text-decoration:underline;cursor:pointer">개인정보처리방침</span>에 동의합니다
+</div>
+</div>
 
-      <div style="text-align:center;margin-bottom:28px;">
-        <div class="step-tag">아파트 단지 법률 자문 서비스</div>
-        <div class="step-title" style="font-size:18px;margin-bottom:6px;">입주자대표회의를 위한<br>전문 법률 파트너</div>
-        <p style="font-size:14px;color:var(--gray);line-height:1.6;">복잡한 단지 법률 문제, 집변이 처음부터 끝까지 함께합니다.</p>
-      </div>
+<!-- Step 2: 추가 정보 (단지/동호) -->
+<div class="step" id="step2">
+<div class="step-header" style="text-align:left;padding:32px 0 20px">
+<div class="step-title">단지 정보를 입력해 주세요</div>
+<div class="step-desc">법률 자문 서비스를 위해 거주 단지 정보가 필요합니다</div>
+</div>
+<div class="user-card" id="userCard">
+<div class="user-avatar" id="userAvatar">홍</div>
+<div><div class="user-name" id="userName">홍길동</div><div class="user-sub" id="userProvider">카카오 로그인</div></div>
+</div>
+<div class="form-group">
+<label class="form-label">단지명</label>
+<input class="form-input" id="f-apt" placeholder="예: 헬리오시티, 잠실파크리오">
+<div class="error-msg">단지명을 입력해 주세요</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label class="form-label">동</label>
+<input class="form-input" id="f-dong" placeholder="101">
+<div class="error-msg">동을 입력해 주세요</div>
+</div>
+<div class="form-group">
+<label class="form-label">호</label>
+<input class="form-input" id="f-ho" placeholder="1502">
+<div class="error-msg">호를 입력해 주세요</div>
+</div>
+</div>
+<div class="form-group">
+<label class="form-label">연락처</label>
+<input class="form-input" id="f-phone" placeholder="010-0000-0000" type="tel">
+<div class="error-msg">연락처를 입력해 주세요</div>
+</div>
+<div style="margin-top:8px">
+<div class="check-row" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><span class="required">[필수]</span> 개인정보 수집 및 이용에 동의합니다</div>
+</div>
+</div>
+<div style="margin-top:20px">
+<button class="btn btn-primary" onclick="goStep3()">다음</button>
+</div>
+</div>
 
-      <div class="value-cards">
-        <div class="value-card">
-          <div class="value-icon">
-            <svg viewBox="0 0 20 20" fill="none" stroke="#2C3E50" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="10" cy="10" r="8"/>
-              <path d="M10 6v4l3 2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="value-text">
-            <h4>AI 법률 상담 (24시간)</h4>
-            <p>언제든지 즉시 답변 받는 AI 기반 법률 상담</p>
-          </div>
-        </div>
-        <div class="value-card">
-          <div class="value-icon">
-            <svg viewBox="0 0 20 20" fill="none" stroke="#2C3E50" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 11c0 2.8-2.24 5-5 5a5 5 0 01-5-5c0-2.76 2.24-5 5-5s5 2.24 5 5z" stroke-linecap="round"/>
-              <path d="M10 8v3l2 1" stroke-linecap="round"/>
-              <path d="M4.93 16.07A9 9 0 0115.07 16" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="value-text">
-            <h4>전문 변호사 연결</h4>
-            <p>입주민 분쟁·하자·관리비 전문 변호사와 직접 상담</p>
-          </div>
-        </div>
-        <div class="value-card">
-          <div class="value-icon">
-            <svg viewBox="0 0 20 20" fill="none" stroke="#2C3E50" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="5" width="14" height="12" rx="2"/>
-              <path d="M7 3v4M13 3v4M3 10h14" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="value-text">
-            <h4>입대의 맞춤 법률 지원</h4>
-            <p>입주자대표회의 운영 특화 서류·자문·계약 검토</p>
-          </div>
-        </div>
-      </div>
+<!-- Step 3: 자문 계약 + 전자서명 -->
+<div class="step" id="step3">
+<div class="step-header" style="text-align:left;padding:32px 0 20px">
+<div class="step-title">법률 자문 계약</div>
+<div class="step-desc">집변 서비스 이용을 위한 간단한 자문 계약입니다</div>
+</div>
 
-      <div class="spacer"></div>
-      <button class="btn btn-primary" onclick="goTo(2)">단지 등록 시작하기</button>
-    </div>
-  </div>
+<div class="contract-box">
+<h4>집변 법률 자문 서비스 이용 계약</h4>
+<p>제1조 (목적) 본 계약은 "집변" 서비스를 통해 이용자에게 법률 정보 안내 및 전문 변호사 연결 서비스를 제공함에 있어 필요한 사항을 정합니다.</p>
+<p>제2조 (서비스 내용)<br>
+- AI 기반 법률 정보 안내 (24시간)<br>
+- 전문 변호사 상담 연결<br>
+- 아파트 단지 관련 법률 자문 (하자, 관리비, 입주민 분쟁 등)</p>
+<p>제3조 (이용료) 기본 AI 법률 정보 안내는 무료로 제공되며, 변호사 직접 상담 및 소송 대리 등 별도 법률 서비스는 개별 수임 계약에 따릅니다.</p>
+<p>제4조 (면책) 본 서비스를 통해 제공되는 AI 응답은 법률 정보 안내 목적이며, 법률 자문에 해당하지 않습니다. 구체적인 법률 문제는 반드시 변호사와 상담하시기 바랍니다.</p>
+<p>제5조 (계약기간) 본 계약은 체결일로부터 1년간 유효하며, 별도 해지 의사표시가 없는 한 자동 갱신됩니다.</p>
+</div>
 
-  <!-- ===== STEP 2: 기본 정보 입력 ===== -->
-  <div class="step" id="step2">
-    <div class="content">
-      <div class="step-tag">단지 정보</div>
-      <div class="step-title">단지 기본 정보를 입력해주세요</div>
-      <p class="step-desc">정확한 단지 정보를 입력하면 맞춤 자문 계약을 안내해 드립니다.</p>
+<div style="margin-bottom:20px">
+<div class="check-row check-all" onclick="toggleAllChecks(this)">
+<div class="check-box" id="checkAll"></div>
+<div class="check-text" style="font-weight:700">전체 동의</div>
+</div>
+<div class="check-row" onclick="toggleCheck(this)" data-agree="1">
+<div class="check-box"></div>
+<div class="check-text"><span class="required">[필수]</span> 법률 자문 서비스 이용 계약에 동의합니다</div>
+</div>
+<div class="check-row" onclick="toggleCheck(this)" data-agree="2">
+<div class="check-box"></div>
+<div class="check-text"><span class="required">[필수]</span> 개인정보 제3자 제공에 동의합니다 (담당 변호사)</div>
+</div>
+<div class="check-row" onclick="toggleCheck(this)" data-agree="3">
+<div class="check-box"></div>
+<div class="check-text">[선택] 마케팅 정보 수신에 동의합니다</div>
+</div>
+</div>
 
-      <div class="form-group" id="fg-complex">
-        <label>단지명 <span class="required">*</span></label>
-        <input type="text" id="inp-complex" placeholder="예: 래미안 한강뷰 아파트" autocomplete="off" />
-        <div class="error-msg">단지명을 입력해주세요.</div>
-      </div>
+<div style="margin-bottom:8px;font-size:14px;font-weight:700">전자 서명</div>
+<div style="font-size:12px;color:var(--sub);margin-bottom:10px">아래 영역에 서명해 주세요 (터치/마우스로 작성)</div>
+<div class="sign-area" id="signArea">
+<div class="sign-placeholder" id="signPlaceholder"><b>여기에 서명</b>터치하여 서명을 작성해 주세요</div>
+<canvas id="signCanvas"></canvas>
+<div class="sign-done" id="signDone">서명 완료</div>
+</div>
+<div class="sign-actions">
+<button onclick="clearSign()">다시 쓰기</button>
+<button onclick="confirmSign()" style="background:var(--navy);color:#fff;border-color:var(--navy)">서명 확인</button>
+</div>
 
-      <div class="form-group" id="fg-addr">
-        <label>단지 주소 <span class="required">*</span></label>
-        <input type="text" id="inp-addr" placeholder="예: 서울시 마포구 상암동 123-1" />
-        <div class="error-msg">단지 주소를 입력해주세요.</div>
-      </div>
+<button class="btn btn-primary" id="btnSubmit" onclick="goStep4()" disabled>계약 체결 완료</button>
+</div>
 
-      <div class="form-group" id="fg-units">
-        <label>총 세대수 <span class="required">*</span></label>
-        <input type="number" id="inp-units" placeholder="예: 850" min="1" />
-        <div class="error-msg">총 세대수를 입력해주세요.</div>
-      </div>
-
-      <div class="form-group" id="fg-office">
-        <label>관리사무소 연락처 <span class="required">*</span></label>
-        <input type="tel" id="inp-office" placeholder="예: 02-1234-5678" />
-        <div class="error-msg">관리사무소 연락처를 입력해주세요.</div>
-      </div>
-
-      <div class="spacer"></div>
-      <button class="btn btn-primary mt16" onclick="validateStep2()">다음</button>
-    </div>
-  </div>
-
-  <!-- ===== STEP 3: 입대의 정보 ===== -->
-  <div class="step" id="step3">
-    <div class="content">
-      <div class="step-tag">입대의 확인</div>
-      <div class="step-title">입주자대표회의<br>대표자를 확인합니다</div>
-      <p class="step-desc">자문 계약의 당사자인 입대의 대표자 정보를 입력해주세요.</p>
-
-      <div class="form-group" id="fg-repname">
-        <label>대표자 이름 <span class="required">*</span></label>
-        <input type="text" id="inp-repname" placeholder="예: 홍길동" />
-        <div class="error-msg">대표자 이름을 입력해주세요.</div>
-      </div>
-
-      <div class="form-group" id="fg-reppos">
-        <label>직위 <span class="required">*</span></label>
-        <div class="select-wrap">
-          <select id="inp-reppos">
-            <option value="">직위를 선택해주세요</option>
-            <option value="회장">회장</option>
-            <option value="감사">감사</option>
-            <option value="동대표">동대표</option>
-            <option value="총무">총무</option>
-            <option value="기타">기타 임원</option>
-          </select>
-        </div>
-        <div class="error-msg">직위를 선택해주세요.</div>
-      </div>
-
-      <div class="form-group" id="fg-reptel">
-        <label>연락처 <span class="required">*</span></label>
-        <input type="tel" id="inp-reptel" placeholder="예: 010-1234-5678" />
-        <div class="error-msg">연락처를 입력해주세요.</div>
-      </div>
-
-      <div class="form-group" id="fg-repemail">
-        <label>이메일 <span class="required">*</span></label>
-        <input type="email" id="inp-repemail" placeholder="예: hong@example.com" />
-        <div class="error-msg">올바른 이메일 주소를 입력해주세요.</div>
-      </div>
-
-      <label class="checkbox-wrap" id="cb-rep-wrap" for="cb-rep">
-        <input type="checkbox" id="cb-rep" />
-        <span>본인은 해당 단지 입주자대표회의의 적법한 대표자임을 확인합니다.</span>
-      </label>
-
-      <div class="spacer"></div>
-      <button class="btn btn-primary" onclick="validateStep3()">다음</button>
-    </div>
-  </div>
-
-  <!-- ===== STEP 4: 자문 범위 선택 ===== -->
-  <div class="step" id="step4">
-    <div class="content">
-      <div class="step-tag">자문 범위</div>
-      <div class="step-title">어떤 법률 자문이<br>필요하신가요?</div>
-      <p class="step-desc">필요한 항목을 모두 선택해주세요. (복수 선택 가능)</p>
-
-      <div class="service-grid" id="serviceGrid">
-        <div class="service-card" data-val="하자 분쟁" onclick="toggleService(this)">
-          <div class="service-card-info">
-            <h4>하자 분쟁</h4>
-            <p>시공사 하자보수 청구</p>
-          </div>
-          <div class="service-check">
-            <svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-        <div class="service-card" data-val="관리비 분쟁" onclick="toggleService(this)">
-          <div class="service-card-info">
-            <h4>관리비 분쟁</h4>
-            <p>관리비 부과 및 징수</p>
-          </div>
-          <div class="service-check">
-            <svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-        <div class="service-card" data-val="입주민 분쟁" onclick="toggleService(this)">
-          <div class="service-card-info">
-            <h4>입주민 분쟁</h4>
-            <p>층간소음, 주차, 반려동물 등</p>
-          </div>
-          <div class="service-check">
-            <svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-        <div class="service-card" data-val="관리 규약 검토" onclick="toggleService(this)">
-          <div class="service-card-info">
-            <h4>관리 규약 검토</h4>
-            <p>단지 관리 규약 법률 검토</p>
-          </div>
-          <div class="service-check">
-            <svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-        <div class="service-card" data-val="위탁관리 계약 검토" onclick="toggleService(this)">
-          <div class="service-card-info">
-            <h4>위탁관리 계약 검토</h4>
-            <p>관리 위탁 계약서 법률 검토</p>
-          </div>
-          <div class="service-check">
-            <svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-        <div class="service-card" data-val="기타 법률 자문" onclick="toggleService(this)">
-          <div class="service-card-info">
-            <h4>기타 법률 자문</h4>
-            <p>위에 해당하지 않는 법률 자문</p>
-          </div>
-          <div class="service-check">
-            <svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-      </div>
-      <div id="service-error" style="font-size:12px;color:var(--red);margin-bottom:12px;display:none;">최소 1개 이상 선택해주세요.</div>
-
-      <div class="spacer"></div>
-      <button class="btn btn-primary" onclick="validateStep4()">다음</button>
-    </div>
-  </div>
-
-  <!-- ===== STEP 5: 계약 내용 확인 ===== -->
-  <div class="step" id="step5">
-    <div class="content">
-      <div class="step-tag">계약 확인</div>
-      <div class="step-title">자문 계약 내용을<br>확인해주세요</div>
-      <p class="step-desc">아래 내용을 검토하고 약관에 동의하시면 계약을 신청할 수 있습니다.</p>
-
-      <div class="summary-section">
-        <div class="summary-header"><h3>계약 요약</h3></div>
-
-        <div class="summary-divider"><span>단지 정보</span></div>
-        <dl>
-          <div class="summary-row"><dt>단지명</dt><dd id="sum-complex">-</dd></div>
-          <div class="summary-row"><dt>총 세대수</dt><dd id="sum-units">-</dd></div>
-          <div class="summary-row"><dt>대표자</dt><dd id="sum-rep">-</dd></div>
-        </dl>
-
-        <div class="summary-divider"><span>자문 범위</span></div>
-        <div class="summary-row" style="flex-direction:column;align-items:flex-start;gap:8px;">
-          <dt style="font-size:13px;color:var(--gray);">선택 항목</dt>
-          <dd style="text-align:left;">
-            <div class="tag-list" id="sum-services"></div>
-          </dd>
-        </div>
-
-        <div class="summary-divider"><span>계약 조건</span></div>
-        <dl>
-          <div class="summary-row"><dt>계약 기간</dt><dd>가입일로부터 1년</dd></div>
-          <div class="summary-row"><dt>월 자문료</dt><dd class="accent" id="sum-fee">-</dd></div>
-          <div class="summary-row"><dt>AI 법률 상담</dt><dd>무제한 포함</dd></div>
-          <div class="summary-row"><dt>변호사 상담</dt><dd>월 2회 포함</dd></div>
-        </dl>
-      </div>
-
-      <label class="checkbox-wrap" id="cb-terms-wrap" for="cb-terms">
-        <input type="checkbox" id="cb-terms" />
-        <span>집변 서비스 이용약관 및 개인정보 처리방침에 동의합니다.</span>
-      </label>
-
-      <div class="spacer"></div>
-      <button class="btn btn-primary" onclick="validateStep5()">자문 계약 신청하기</button>
-    </div>
-  </div>
-
-  <!-- ===== STEP 6: 완료 ===== -->
-  <div class="step" id="step6">
-    <div class="content">
-      <div class="complete-center">
-        <div class="check-circle">
-          <svg viewBox="0 0 40 40" fill="none" stroke="#16a34a" stroke-width="2.5" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="17" stroke="#16a34a" stroke-opacity="0.3"/>
-            <path d="M12 20l6 6 11-11" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="complete-title">자문 계약 신청이<br>완료되었습니다</div>
-        <p class="complete-desc">담당 변호사가 영업일 기준 1일 내<br>입력하신 연락처로 연락드립니다.</p>
-
-        <div class="receipt-card">
-          <p>접수 번호</p>
-          <div class="receipt-no" id="receipt-no">JB-2026-000000</div>
-        </div>
-      </div>
-
-      <div class="spacer"></div>
-      <a href="https://jibbyun.com" target="_blank" rel="noopener" style="text-decoration:none;">
-        <button class="btn btn-primary">집변 서비스 바로가기</button>
-      </a>
-    </div>
-  </div>
+<!-- Step 4: 완료 -->
+<div class="step" id="step4">
+<div class="complete-icon">
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+</div>
+<div class="complete-title">가입 완료!</div>
+<div class="complete-sub">집변 서비스 가입이 완료되었습니다.<br>지금 바로 AI 법률 상담을 시작하세요.</div>
+<div class="complete-card">
+<div class="complete-row"><span>이름</span><span id="cName">홍길동</span></div>
+<div class="complete-row"><span>단지</span><span id="cApt">-</span></div>
+<div class="complete-row"><span>동/호</span><span id="cDongHo">-</span></div>
+<div class="complete-row"><span>계약 번호</span><span id="cNum">-</span></div>
+<div class="complete-row"><span>계약일</span><span id="cDate">-</span></div>
+</div>
+<button class="btn btn-primary" style="margin-bottom:12px">집변 서비스 바로가기</button>
+<button class="btn btn-outline" onclick="location.reload()">처음으로</button>
+</div>
 
 </div>
 
 <script>
-  // ---- State ----
-  const state = {
-    currentStep: 1,
-    totalSteps: 5, // steps 2-6 show progress (1-5)
-    data: {}
-  };
+var currentStep=1;
+var userData={name:'',provider:'',apt:'',dong:'',ho:'',phone:''};
+var signed=false;
 
-  const stepLabels = ['기본 정보', '입대의 확인', '자문 범위', '계약 확인', '완료'];
+function showStep(n){
+currentStep=n;
+document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active')});
+document.getElementById('step'+n).classList.add('active');
+var pg=document.getElementById('progress');
+if(n===1){pg.classList.remove('show')}
+else{pg.classList.add('show');var pct=((n-1)/3)*100;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressLabel').textContent=(n-1)+' / 3';}
+window.scrollTo(0,0);
+}
 
-  // ---- Navigation ----
-  function goTo(step) {
-    const prev = document.getElementById('step' + state.currentStep);
-    if (prev) prev.classList.remove('active');
+function socialLogin(provider){
+var names=['홍길동','김민수','이서연','박지호','최유진'];
+var name=names[Math.floor(Math.random()*names.length)];
+userData.name=name;
+userData.provider=provider==='kakao'?'카카오':'네이버';
+document.getElementById('userName').textContent=name;
+document.getElementById('userAvatar').textContent=name[0];
+document.getElementById('userProvider').textContent=userData.provider+' 로그인';
+showStep(2);
+}
 
-    state.currentStep = step;
+function toggleCheck(el){
+var box=el.querySelector('.check-box');
+box.classList.toggle('checked');
+updateSubmitBtn();
+}
+function toggleAllChecks(el){
+var box=el.querySelector('.check-box');
+var isChecked=box.classList.contains('checked');
+box.classList.toggle('checked');
+var rows=document.querySelectorAll('#step3 .check-row[data-agree]');
+rows.forEach(function(r){var b=r.querySelector('.check-box');if(isChecked)b.classList.remove('checked');else b.classList.add('checked');});
+updateSubmitBtn();
+}
+function updateSubmitBtn(){
+var req=document.querySelectorAll('#step3 .check-row[data-agree="1"] .check-box.checked, #step3 .check-row[data-agree="2"] .check-box.checked');
+document.getElementById('btnSubmit').disabled=!(req.length===2&&signed);
+}
 
-    const next = document.getElementById('step' + step);
-    if (next) next.classList.add('active');
+function goStep3(){
+var apt=document.getElementById('f-apt');
+var dong=document.getElementById('f-dong');
+var ho=document.getElementById('f-ho');
+var phone=document.getElementById('f-phone');
+var agree=document.querySelector('#step2 .check-box');
+var ok=true;
+[apt,dong,ho,phone].forEach(function(f){if(!f.value.trim()){f.classList.add('error');ok=false}else{f.classList.remove('error')}});
+if(!agree.classList.contains('checked')){ok=false;alert('개인정보 수집 동의가 필요합니다')}
+if(!ok)return;
+userData.apt=apt.value;userData.dong=dong.value;userData.ho=ho.value;userData.phone=phone.value;
+showStep(3);initCanvas();
+}
 
-    updateProgress(step);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+function goStep4(){
+document.getElementById('cName').textContent=userData.name;
+document.getElementById('cApt').textContent=userData.apt;
+document.getElementById('cDongHo').textContent=userData.dong+'동 '+userData.ho+'호';
+document.getElementById('cNum').textContent='JB-2026-'+Math.random().toString(36).substr(2,6).toUpperCase();
+var d=new Date();document.getElementById('cDate').textContent=d.getFullYear()+'.'+(d.getMonth()+1)+'.'+d.getDate();
+showStep(4);
+}
 
-  function updateProgress(step) {
-    const wrap = document.getElementById('progressWrap');
-    const fill = document.getElementById('progressFill');
-    const text = document.getElementById('progressText');
-    const frac = document.getElementById('progressFraction');
-
-    if (step === 1) {
-      wrap.classList.add('hidden');
-      return;
-    }
-    wrap.classList.remove('hidden');
-
-    const idx = step - 2; // 0-based for steps 2-6
-    const pct = Math.round(((idx + 1) / state.totalSteps) * 100);
-    fill.style.width = pct + '%';
-    text.textContent = stepLabels[idx] || '';
-    frac.textContent = (idx + 1) + ' / ' + state.totalSteps;
-  }
-
-  // ---- Validation helpers ----
-  function setError(groupId, show) {
-    const el = document.getElementById(groupId);
-    if (!el) return;
-    if (show) el.classList.add('has-error');
-    else el.classList.remove('has-error');
-  }
-
-  function val(id) {
-    const el = document.getElementById(id);
-    return el ? el.value.trim() : '';
-  }
-
-  function isEmail(s) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
-  }
-
-  // ---- Step 2 ----
-  function validateStep2() {
-    let ok = true;
-    if (!val('inp-complex')) { setError('fg-complex', true); ok = false; } else setError('fg-complex', false);
-    if (!val('inp-addr'))    { setError('fg-addr', true);    ok = false; } else setError('fg-addr', false);
-    if (!val('inp-units') || parseInt(val('inp-units')) < 1) { setError('fg-units', true); ok = false; } else setError('fg-units', false);
-    if (!val('inp-office'))  { setError('fg-office', true);  ok = false; } else setError('fg-office', false);
-    if (!ok) return;
-    state.data.complex = val('inp-complex');
-    state.data.addr    = val('inp-addr');
-    state.data.units   = parseInt(val('inp-units'));
-    state.data.office  = val('inp-office');
-    goTo(3);
-  }
-
-  // ---- Step 3 ----
-  function validateStep3() {
-    let ok = true;
-    if (!val('inp-repname'))  { setError('fg-repname', true);  ok = false; } else setError('fg-repname', false);
-    if (!val('inp-reppos'))   { setError('fg-reppos', true);   ok = false; } else setError('fg-reppos', false);
-    if (!val('inp-reptel'))   { setError('fg-reptel', true);   ok = false; } else setError('fg-reptel', false);
-    if (!val('inp-repemail') || !isEmail(val('inp-repemail'))) { setError('fg-repemail', true); ok = false; } else setError('fg-repemail', false);
-
-    const cb = document.getElementById('cb-rep');
-    const cbWrap = document.getElementById('cb-rep-wrap');
-    if (!cb.checked) { cbWrap.classList.add('error-cb'); ok = false; } else cbWrap.classList.remove('error-cb');
-    if (!ok) return;
-
-    state.data.repName  = val('inp-repname');
-    state.data.repPos   = val('inp-reppos');
-    state.data.repTel   = val('inp-reptel');
-    state.data.repEmail = val('inp-repemail');
-    goTo(4);
-  }
-
-  // ---- Step 4 ----
-  function toggleService(card) {
-    card.classList.toggle('selected');
-  }
-
-  function validateStep4() {
-    const selected = Array.from(document.querySelectorAll('#serviceGrid .service-card.selected'));
-    const errEl = document.getElementById('service-error');
-    if (selected.length === 0) {
-      errEl.style.display = 'block';
-      return;
-    }
-    errEl.style.display = 'none';
-    state.data.services = selected.map(c => c.getAttribute('data-val'));
-    buildSummary();
-    goTo(5);
-  }
-
-  // ---- Step 5 summary ----
-  function buildSummary() {
-    document.getElementById('sum-complex').textContent = state.data.complex || '-';
-    document.getElementById('sum-units').textContent = (state.data.units || '-') + ' 세대';
-    document.getElementById('sum-rep').textContent = (state.data.repName || '-') + ' ' + (state.data.repPos || '');
-
-    // fee calc
-    let fee = '';
-    const u = state.data.units || 0;
-    if (u <= 1000) fee = '월 300,000원';
-    else if (u <= 3000) fee = '월 500,000원';
-    else fee = '월 800,000원';
-    document.getElementById('sum-fee').textContent = fee;
-
-    // services
-    const tagList = document.getElementById('sum-services');
-    tagList.innerHTML = '';
-    (state.data.services || []).forEach(s => {
-      const span = document.createElement('span');
-      span.className = 'tag';
-      span.textContent = s;
-      tagList.appendChild(span);
-    });
-  }
-
-  function validateStep5() {
-    const cb = document.getElementById('cb-terms');
-    const cbWrap = document.getElementById('cb-terms-wrap');
-    if (!cb.checked) {
-      cbWrap.classList.add('error-cb');
-      return;
-    }
-    cbWrap.classList.remove('error-cb');
-    generateReceipt();
-    goTo(6);
-  }
-
-  // ---- Step 6 receipt ----
-  function generateReceipt() {
-    const now = new Date();
-    const yy = now.getFullYear();
-    const rand = String(Math.floor(Math.random() * 900000) + 100000);
-    document.getElementById('receipt-no').textContent = 'JB-' + yy + '-' + rand;
-  }
-
-  // ---- Init ----
-  updateProgress(1);
+// Canvas signature
+var canvas,ctx,drawing=false;
+function initCanvas(){
+canvas=document.getElementById('signCanvas');
+var area=document.getElementById('signArea');
+canvas.width=area.offsetWidth;
+canvas.height=area.offsetHeight;
+ctx=canvas.getContext('2d');
+ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.lineCap='round';
+canvas.addEventListener('mousedown',startDraw);
+canvas.addEventListener('mousemove',draw);
+canvas.addEventListener('mouseup',endDraw);
+canvas.addEventListener('mouseleave',endDraw);
+canvas.addEventListener('touchstart',function(e){e.preventDefault();startDraw(e.touches[0])});
+canvas.addEventListener('touchmove',function(e){e.preventDefault();draw(e.touches[0])});
+canvas.addEventListener('touchend',endDraw);
+}
+function getPos(e){var r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+function startDraw(e){drawing=true;var p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);document.getElementById('signPlaceholder').style.display='none'}
+function draw(e){if(!drawing)return;var p=getPos(e);ctx.lineTo(p.x,p.y);ctx.stroke()}
+function endDraw(){drawing=false}
+function clearSign(){if(ctx){ctx.clearRect(0,0,canvas.width,canvas.height)}document.getElementById('signPlaceholder').style.display='';document.getElementById('signDone').style.display='none';signed=false;updateSubmitBtn()}
+function confirmSign(){var d=ctx.getImageData(0,0,canvas.width,canvas.height).data;var hasContent=false;for(var i=3;i<d.length;i+=4){if(d[i]>0){hasContent=true;break}}if(!hasContent){alert('서명을 작성해 주세요');return}signed=true;document.getElementById('signDone').style.display='block';updateSubmitBtn()}
 </script>
 </body>
 </html>
